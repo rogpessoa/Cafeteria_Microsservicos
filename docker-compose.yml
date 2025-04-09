@@ -1,0 +1,42 @@
+services:
+  produtos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app/produto
+    image: produtos
+    container_name: produtos
+    volumes:
+      - ./produto/:/app/produto
+
+    ports:
+      - "5001:5001"
+
+  pedidos:
+    build:
+       context: .
+       dockerfile: Dockerfile
+    working_dir: /app/pedido
+    image: pedidos
+    container_name: pedidos
+    volumes:
+      - ./pedido/:/app/pedido
+    ports:
+      - "5002:5002"
+    depends_on:
+      - produtos
+
+  pagamento:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app/pagamento
+    image: pagamentos
+    container_name: pagamentos
+    volumes:
+      - ./pagamento/:/app/pagamento
+    ports:
+      - "5003:5003"
+    depends_on:
+      - pedidos
+      - produtos
